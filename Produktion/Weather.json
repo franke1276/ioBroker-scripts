@@ -1,0 +1,28 @@
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
+function findForecast(timePeriod) {
+    WeatherApi.findForecast(timePeriod, function (forecast) {
+        const temp = parseInt(forecast.high.celsius);
+        log('forecast for ' + forecast.date.pretty + ': ' +  temp + " C"); 
+        setStateByName("ForecastTemp", temp);
+    });
+}
+
+schedule("0 22 * * *", function () {
+    findForecast(WeatherApi.TOMORROW);
+});
+
+schedule("0 8 * * *", function () {
+    findForecast(WeatherApi.TODAY);
+});
+
+schedule("*/1 * * * *", function () {
+  WeatherApi.findCurrentCondition(function (temp) {
+        log('AussenTemp:' +  temp); 
+        setStateByName("AussenTemp", temp);
+    });
+});

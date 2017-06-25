@@ -1,0 +1,32 @@
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
+
+var WeatherApi = {
+    TODAY: 0,
+    TOMORROW: 1,
+    "findForecast" : function (timePeriod, callback) {
+      request('http://api.wunderground.com/api/eacde5aa6c442f83/forecast/lang:DL/q/Germany/Berlin.json', function (error, response, body) {
+          if (error){
+            log('error:' + error); 
+          } else {
+              const forcastDay = JSON.parse(body).forecast.simpleforecast.forecastday[timePeriod];
+              callback(forcastDay);
+          }
+  });
+},
+    "findCurrentCondition" : function (callback) {
+      request('http://api.wunderground.com/api/eacde5aa6c442f83/conditions/lang:DL/q/Germany/Berlin.json', function (error, response, body) {
+          if (error){
+            log('error:' +  error); 
+          } else {
+            const temp = parseInt(JSON.parse(body).current_observation.temp_c);
+            callback(temp);
+          }
+      });
+}
+
+}

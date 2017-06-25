@@ -1,0 +1,9 @@
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
+function setStateByName(name, state) {
+    setState(getIdByName(name), state, false, function () { log(name + " was successfully set"); });
+}
