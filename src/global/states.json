@@ -4,6 +4,17 @@
   "verbose": false
 }
 -- do not edit previous lines - END --*/
-function setStateByName(name, state) {
-    setState(getIdByName(name), state, false, function () { log(name + " was successfully set"); });
+var States = {
+    "getStateByName" : function (name) {
+        const state = getState(getIdByName(name));
+        //log("state for " + name + " : " + JSON.stringify(state));
+        return state.val;
+    },
+    "setStateByName": function (name, state) {
+        setState(getIdByName(name), state, false, function () { log(name + " was successfully set"); });
+    }
+
 }
+
+
+

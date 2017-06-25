@@ -1,0 +1,21 @@
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
+function decrementDays(){
+    const days = States.getStateByName("NichtBeregnenFuer");
+    log("nicht beregnen für  " + days + " Tage");
+    let newDays = days - 1;
+    if (newDays < 0) {
+        newDays = 0;
+    }
+    log("neuer state NichtBeregnenFuer: " + newDays);
+    States.setStateByName("NichtBeregnenFuer", newDays);  
+}
+
+schedule("0 22 * * *", function () {
+    decrementDays();
+});
+

@@ -8,7 +8,7 @@ function findForecast(timePeriod) {
     WeatherApi.findForecast(timePeriod, function (forecast) {
         const temp = parseInt(forecast.high.celsius);
         log('forecast for ' + forecast.date.pretty + ': ' +  temp + " C"); 
-        setStateByName("ForecastTemp", temp);
+        States.setStateByName("ForecastTemp", temp);
     });
 }
 
@@ -19,10 +19,10 @@ schedule("0 22 * * *", function () {
 schedule("0 8 * * *", function () {
     findForecast(WeatherApi.TODAY);
 });
-
-schedule("*/1 * * * *", function () {
+ 
+schedule("0 * * * *", function () {
   WeatherApi.findCurrentCondition(function (temp) {
         log('AussenTemp:' +  temp); 
-        setStateByName("AussenTemp", temp);
+        States.setStateByName("AussenTemp", temp);
     });
 });
