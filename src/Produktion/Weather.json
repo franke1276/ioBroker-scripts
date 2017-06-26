@@ -5,6 +5,7 @@
 }
 -- do not edit previous lines - END --*/
 function findForecast(timePeriod) {
+    log("findForecast for period " + timePeriod);
     WeatherApi.findForecast(timePeriod, function (forecast) {
         const temp = parseInt(forecast.high.celsius);
         log('forecast for ' + forecast.date.pretty + ': ' +  temp + " C"); 
