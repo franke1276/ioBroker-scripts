@@ -7,14 +7,26 @@
 var States = {
     "getStateByName" : function (name) {
         const state = getState(getIdByName(name));
-        //log("state for " + name + " : " + JSON.stringify(state));
+         //log("state for " + name + " : " + JSON.stringify(state));
         return state.val;
     },
     "setStateByName": function (name, state) {
         setState(getIdByName(name), state, false, function () { log(name + " was successfully set"); });
+    },
+    "setStateDelayedByName": function (name, state, timeInSec, reset) {
+        setStateDelayed(getIdByName(name), state, false, timeInSec * 1000 , reset, function () { log(name + " was successfully delayed ("+time+") set"); });
     }
-
 }
 
+var SystemVariablen = {
+    "Wassermenge": function(menge) {
+        if (menge) {
+            States.setStateByName("Wassermenge", menge);    
+        } else {
+            return States.getStateByName("Wassermenge");
+        }
+        
+    }
+}
 
 

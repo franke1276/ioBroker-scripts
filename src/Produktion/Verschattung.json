@@ -1,0 +1,63 @@
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
+
+log("Verschattung LEVEL:" + States.getStateByName("WZ-Raffstore-SW.LEVEL"));
+
+const Configs = {
+    "WZ-Raffstore-SW.LEVEL": {
+        "levels": {
+            "geschlossen" : 0,
+            "verschattetDiff" : 2
+            
+        },
+        "maxDelayInSec": 50
+    },
+    "ES-Raffstore-SW.LEVEL": {
+        "levels": {
+            "geschlossen" : 15,
+            "verschattetDiff" : 1.5
+            
+        },
+        "maxDelayInSec": 60
+    }
+    
+};
+
+//States.setStateByName("WZ-Raffstore-SW.LEVEL", 1)
+
+/*function setStateDelayed(name, desiredValue, currentValue) {
+    const config = Configs[name];
+    const diff = Math.abs(desiredValue - currentValue);
+    if (diff !== 0) {
+        const calculatedDelay = config.maxDelayInSec / 100.0 * diff;
+        States.setStateDelayedByName(name, desiredVerschattungsGradValue, calculatedDelay, false);
+    }
+}
+*/
+
+function verschatte(name) {
+    const config = Configs[name];
+    const verschattungsGrad = "verschattet";
+    const currentValue = States.getStateByName(name);
+    if (currentValue === 0) { 
+        log("vollverschattet, keine Änderung.")
+        return;
+    }
+    log(name + ": " + currentValue);
+    const diff = currentValue - config.levels.geschlossen;
+    if (Math.abs(diff) !== 0) {
+        const calculatedDelay = config.maxDelayInSec / 100.0 * Math.abs(diff);
+        
+        States.setStateByName(name, config.levels.geschlossen);
+        const offest = currentValue > config.levels.geschlossen ? config.levels.verschattetDiff : -config.levels.verschattetDiff 
+        log("set " + name + " to " + config.levels.geschlossen + " after " + calculatedDelay + " to " + (config.levels.geschlossen + offest));
+        States.setStateDelayedByName(name, config.levels.geschlossen + offest, calculatedDelay, false);
+    }
+} 
+verschatte("ES-Raffstore-SW.LEVEL")
+
+//log("state: " + States.getStateByName("ES-Raffstore-SW.LEVEL"));

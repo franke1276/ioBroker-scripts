@@ -15,7 +15,7 @@ function decrementDays(){
     States.setStateByName("NichtBeregnenFuer", newDays);  
 }
 
-schedule("0 22 * * *", function () {
+schedule("0 6 * * *", function () {
     decrementDays();
 });
 
