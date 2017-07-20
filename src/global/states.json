@@ -19,11 +19,27 @@ var States = {
 }
 
 var SystemVariablen = {
-    "Wassermenge": function(menge) {
+    "BodenFeuchtigkeit": function(menge) {
         if (menge) {
-            States.setStateByName("Wassermenge", menge);    
+            States.setStateByName("BodenFeuchtigkeit", menge);    
         } else {
-            return States.getStateByName("Wassermenge");
+            return States.getStateByName("BodenFeuchtigkeit");
+        }
+        
+    },
+    "AussenTemp": function(menge) {
+        if (menge) {
+            States.setStateByName("AussenTemp", menge);    
+        } else {
+            return States.getStateByName("AussenTemp");
+        }
+        
+    },
+    "MaxTemp": function(menge) {
+        if (menge) {
+            States.setStateByName("MaxTemp", menge);    
+        } else {
+            return States.getStateByName("MaxTemp");
         }
         
     }

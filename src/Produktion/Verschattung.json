@@ -5,8 +5,6 @@
 }
 -- do not edit previous lines - END --*/
 
-log("Verschattung LEVEL:" + States.getStateByName("WZ-Raffstore-SW.LEVEL"));
-
 const Configs = {
     "WZ-Raffstore-SW.LEVEL": {
         "levels": {
@@ -23,21 +21,41 @@ const Configs = {
             
         },
         "maxDelayInSec": 60
+    },
+    "KU-Raffstore-SO.LEVEL": {
+        "levels": {
+            "geschlossen" : 0,
+            "verschattetDiff" : 2
+            
+        },
+        "maxDelayInSec": 36
+    },
+    "HWR-Raffstore-SO.LEVEL": {
+        "levels": {
+            "geschlossen" : 0,
+            "verschattetDiff" : 2
+            
+        },
+        "maxDelayInSec": 36
+    },
+    "BU-Raffstore-SW.LEVEL": {
+        "levels": {
+            "geschlossen" : 0,
+            "verschattetDiff" : 2
+            
+        },
+        "maxDelayInSec": 42
+    },
+    "KI-Raffstore-SW.LEVEL": {
+        "levels": {
+            "geschlossen" : 0,
+            "verschattetDiff" : 2
+            
+        },
+        "maxDelayInSec": 42
     }
     
 };
-
-//States.setStateByName("WZ-Raffstore-SW.LEVEL", 1)
-
-/*function setStateDelayed(name, desiredValue, currentValue) {
-    const config = Configs[name];
-    const diff = Math.abs(desiredValue - currentValue);
-    if (diff !== 0) {
-        const calculatedDelay = config.maxDelayInSec / 100.0 * diff;
-        States.setStateDelayedByName(name, desiredVerschattungsGradValue, calculatedDelay, false);
-    }
-}
-*/
 
 function verschatte(name) {
     const config = Configs[name];
@@ -58,6 +76,19 @@ function verschatte(name) {
         States.setStateDelayedByName(name, config.levels.geschlossen + offest, calculatedDelay, false);
     }
 } 
-verschatte("ES-Raffstore-SW.LEVEL")
 
-//log("state: " + States.getStateByName("ES-Raffstore-SW.LEVEL"));
+function verschatteAll(devices) {
+    if (SystemVariablen.AussenTemp() > 18) {
+        devices.foreach(verschatte);
+    }
+}
+
+function verschatteSW() {
+    verschatteAll(["ES-Raffstore-SW.LEVEL", "WZ-Raffstore-SW.LEVEL", "KI-Raffstore-SW.LEVEL", "BU-Raffstore-SW.LEVEL"]);
+}
+function verschatteSO() {
+    verschatteAll(["KU-Raffstore-SO.LEVEL", "HWR-Raffstore-SO.LEVEL"]);
+}
+
+schedule("*/5 11-22 * * *", verschatteSW);
+schedule("*/5 8-12 * * *", verschatteSO);

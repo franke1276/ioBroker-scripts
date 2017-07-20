@@ -20,10 +20,17 @@ schedule("0 22 * * *", function () {
 schedule("0 8 * * *", function () {
     findForecast(WeatherApi.TODAY);
 });
+
+schedule("0 0 * * *", function () {
+    SystemVariablen.MaxTemp(-20);
+});
+
  
-schedule("0 * * * *", function () {
+schedule("1 * * * *", function () {
   WeatherApi.findCurrentCondition(function (temp) {
-        log('AussenTemp:' +  temp); 
-        States.setStateByName("AussenTemp", temp);
+        if (temp > SystemVariablen.MaxTemp() ) {
+            SystemVariablen.MaxTemp(temp);
+        }
+        SystemVariablen.AussenTemp(temp)
     });
 });

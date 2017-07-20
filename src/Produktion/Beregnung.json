@@ -4,18 +4,43 @@
   "verbose": false
 }
 -- do not edit previous lines - END --*/
-function decrementDays(){
-    const days = States.getStateByName("NichtBeregnenFuer");
-    log("nicht beregnen für  " + days + " Tage");
-    let newDays = days - 1;
-    if (newDays < 0) {
-        newDays = 0;
-    }
-    log("neuer state NichtBeregnenFuer: " + newDays);
-    States.setStateByName("NichtBeregnenFuer", newDays);  
+
+
+function beregnenByName(name, delayInSec, durationInSec) {
+    log("starte Beregnung " + name + " delayInSec: " + delayInSec + " durationInSec: " + durationInSec);
+    States.setStateDelayedByName(name + ".STATE", true, delayInSec, false);
+    States.setStateDelayedByName(name + ".STATE", false, delayInSec + durationInSec, false);
+    return delayInSec + durationInSec;
 }
 
-schedule("0 6 * * *", function () {
-    decrementDays();
+function beregnenAlle() {
+    let delay = 0;
+    delay = beregnenByName("Beregung-Hinten", delay, 45 * 60);
+    delay = beregnenByName("Beregnung Vorne", delay, 45 * 60);
+    delay = beregnenByName("Beregnung Einfahrt", delay, 30 * 60);
+    delay = beregnenByName("Tropfberegung", delay, 60 * 60);
+}
+
+function beregnen(){
+    let feuchtigkeit = SystemVariablen.BodenFeuchtigkeit();
+    if (feuchtigkeit === 0) {
+        log("Feuchtigkeit bei " + feuchtigkeit + ", beregnen!");
+        beregnenAlle();
+        SystemVariablen.BodenFeuchtigkeit(4);
+    }
+}
+
+
+
+schedule("0 22 * * *", function () {
+     if (SystemVariable.MaxTemp() >= 28) {
+         SystemVariablen.BodenFeuchtigkeit(0);
+     } else if (SystemVariable.MaxTemp() >= 20) {
+         SystemVariablen.BodenFeuchtigkeit(SystemVariablen.BodenFeuchtigkeit() - 2);
+     } else if (SystemVariable.MaxTemp() >= 15) {
+         SystemVariablen.BodenFeuchtigkeit(SystemVariablen.BodenFeuchtigkeit() - 1);
+     }
 });
 
+
+schedule("30 0 * * *", beregnen); 
