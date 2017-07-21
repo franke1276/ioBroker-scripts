@@ -15,32 +15,37 @@ function beregnenByName(name, delayInSec, durationInSec) {
 
 function beregnenAlle() {
     let delay = 0;
-    delay = beregnenByName("Beregung-Hinten", delay, 45 * 60);
-    delay = beregnenByName("Beregnung Vorne", delay, 45 * 60);
-    delay = beregnenByName("Beregnung Einfahrt", delay, 30 * 60);
-    delay = beregnenByName("Tropfberegung", delay, 60 * 60);
+    delay = beregnenByName("Beregung-Hinten", delay, 10 * 60);
+    delay = beregnenByName("Beregnung Vorne", delay, 10 * 60);
+    delay = beregnenByName("Beregnung Einfahrt", delay, 10 * 60);
+    delay = beregnenByName("Tropfberegung", delay, 10 * 60);
 }
 
 function beregnen(){
-    let feuchtigkeit = SystemVariablen.BodenFeuchtigkeit();
+    let feuchtigkeit = SystemVariablen.BodenFeuchtigkeit.get();
     if (feuchtigkeit === 0) {
         log("Feuchtigkeit bei " + feuchtigkeit + ", beregnen!");
         beregnenAlle();
-        SystemVariablen.BodenFeuchtigkeit(4);
+        SystemVariablen.BodenFeuchtigkeit.set(4);
     }
+}
+ 
+function decrementBodenFeuchtigkeit() {
+    const bodenFeuchtigkeit = SystemVariablen.BodenFeuchtigkeit.get();
+    const maxTemp = SystemVariablen.MaxTemp.get();
+    let newBodenFeuchtigkeit = bodenFeuchtigkeit;
+    if (maxTemp >= 28) {
+        newBodenFeuchtigkeit = 0;
+    } else if (maxTemp >= 20) {
+        newBodenFeuchtigkeit = bodenFeuchtigkeit - 2;
+    } else if (maxTemp >= 15) {
+        newBodenFeuchtigkeit = bodenFeuchtigkeit - 1;
+    }
+    newBodenFeuchtigkeit = Math.max(0, newBodenFeuchtigkeit);
+    log("decrement feuchtigkeit, Alt: " + bodenFeuchtigkeit + ", Neu: " + newBodenFeuchtigkeit);
+    SystemVariablen.BodenFeuchtigkeit.set(newBodenFeuchtigkeit);
 }
 
 
-
-schedule("0 22 * * *", function () {
-     if (SystemVariable.MaxTemp() >= 28) {
-         SystemVariablen.BodenFeuchtigkeit(0);
-     } else if (SystemVariable.MaxTemp() >= 20) {
-         SystemVariablen.BodenFeuchtigkeit(SystemVariablen.BodenFeuchtigkeit() - 2);
-     } else if (SystemVariable.MaxTemp() >= 15) {
-         SystemVariablen.BodenFeuchtigkeit(SystemVariablen.BodenFeuchtigkeit() - 1);
-     }
-});
-
-
-schedule("30 0 * * *", beregnen); 
+schedule("0 23 * * *", decrementBodenFeuchtigkeit);
+schedule("0 21 * * *", beregnen);

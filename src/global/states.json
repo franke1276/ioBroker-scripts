@@ -14,34 +14,35 @@ var States = {
         setState(getIdByName(name), state, false, function () { log(name + " was successfully set"); });
     },
     "setStateDelayedByName": function (name, state, timeInSec, reset) {
-        setStateDelayed(getIdByName(name), state, false, timeInSec * 1000 , reset, function () { log(name + " was successfully delayed ("+time+") set"); });
+        setStateDelayed(getIdByName(name), state, false, timeInSec * 1000 , reset, function () { log(name + " was successfully delayed ("+timeInSec+") set"); });
     }
 }
 
 var SystemVariablen = {
-    "BodenFeuchtigkeit": function(menge) {
-        if (menge) {
+    "BodenFeuchtigkeit":  {
+        set(menge) {
             States.setStateByName("BodenFeuchtigkeit", menge);    
-        } else {
+        },
+        get() {
             return States.getStateByName("BodenFeuchtigkeit");
         }
-        
     },
-    "AussenTemp": function(menge) {
-        if (menge) {
+    "AussenTemp": {
+        set(menge) {
             States.setStateByName("AussenTemp", menge);    
-        } else {
+        },
+        get() {
             return States.getStateByName("AussenTemp");
         }
         
     },
-    "MaxTemp": function(menge) {
-        if (menge) {
+    "MaxTemp": {
+        set(menge) {
             States.setStateByName("MaxTemp", menge);    
-        } else {
+        },
+        get() {
             return States.getStateByName("MaxTemp");
         }
-        
     }
 }
 

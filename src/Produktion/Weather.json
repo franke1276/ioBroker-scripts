@@ -22,15 +22,15 @@ schedule("0 8 * * *", function () {
 });
 
 schedule("0 0 * * *", function () {
-    SystemVariablen.MaxTemp(-20);
+    SystemVariablen.MaxTemp.set(-20);
 });
 
  
 schedule("1 * * * *", function () {
   WeatherApi.findCurrentCondition(function (temp) {
-        if (temp > SystemVariablen.MaxTemp() ) {
-            SystemVariablen.MaxTemp(temp);
+        if (temp > SystemVariablen.MaxTemp.get() ) {
+            SystemVariablen.MaxTemp.set(temp);
         }
-        SystemVariablen.AussenTemp(temp)
+        SystemVariablen.AussenTemp.set(temp)
     });
 });
