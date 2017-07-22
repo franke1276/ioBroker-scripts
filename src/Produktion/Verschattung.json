@@ -88,7 +88,10 @@ function verschatte(name) {
 } 
 
 function verschatteAll(devices) {
-    if (SystemVariablen.AussenTemp.get() > 18) {
+    const temp = SystemVariablen.AussenTemp.get();
+    const helligkeit = States.getStateByName("Bewegungsmelder-Sender.BRIGHTNESS");
+    log("Prüfe Verschattung: temp: " + temp + ", helligkeit: " + helligkeit);
+    if (temp > 18 && helligkeit > 185) {
         devices.forEach(verschatte);
     }
 }
@@ -104,6 +107,6 @@ function verschatteNW() {
 }
 
 schedule("*/5 17-20 * * *", verschatteNW);
-schedule("*/5 11-22 * * *", verschatteSW);
+schedule("*/5 11-20 * * *", verschatteSW);
 schedule("*/5 8-12 * * *", verschatteSO);
 

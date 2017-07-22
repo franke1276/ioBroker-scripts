@@ -36,12 +36,37 @@ var SystemVariablen = {
         }
         
     },
+    "ForecastTemp": {
+        set(menge) {
+            States.setStateByName("ForecastTemp", menge);    
+        },
+        get() {
+            return States.getStateByName("ForecastTemp");
+        }
+        
+    },
     "MaxTemp": {
         set(menge) {
             States.setStateByName("MaxTemp", menge);    
         },
         get() {
             return States.getStateByName("MaxTemp");
+        }
+    },
+    "RegenForecast": {
+        set(menge) {
+            States.setStateByName("RegenForecast", menge);    
+        },
+        get() {
+            return States.getStateByName("RegenForecast");
+        }
+    },
+    "RegenHeute": {
+        set(menge) {
+            States.setStateByName("RegenHeute", menge);    
+        },
+        get() {
+            return States.getStateByName("RegenHeute");
         }
     }
 }
