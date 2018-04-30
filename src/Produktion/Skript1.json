@@ -5,34 +5,9 @@
 }
 -- do not edit previous lines - END --*/
 
-function beregnenByName(name, delayInSec, durationInSec) {
-    log("starte Beregnung " + name + " delayInSec: " + delayInSec + " durationInSec: " + durationInSec);
-    States.setStateDelayedByName(name + ".STATE", true, delayInSec, false);
-    States.setStateDelayedByName(name + ".STATE", false, delayInSec + durationInSec, false);
-    return delayInSec + durationInSec;
-}
+var sunriseEnd = getAstroDate("sunsetStart"); 
+log("Sunrise ends today at " + JSON.stringify(sunriseEnd));
+  
+log("Tuerkontakt-SW.STATE: " + States.getStateByName("ES-Raffstore-SO.LEVEL"));   
 
-function beregnenAlle() {
-    let delay = 0;
-    delay = beregnenByName("Beregung-Hinten", delay, 30);
-    delay = beregnenByName("Beregnung Vorne", delay, 30);
-    delay = beregnenByName("Beregnung Einfahrt", delay, 30);
-    delay = beregnenByName("Tropfberegung", delay, 30);
-}
-
-function beregnen(){
-    let feuchtigkeit = SystemVariablen.Wassermenge();
-    if (feuchtigkeit === 0) {
-        log("Feuchtigkeit bei " + feuchtigkeit + ", beregnen!");
-        beregnenAlle();
-        SystemVariablen.Wassermenge(4);
-    }
-}
-
-
-log(States.getStateByName("ES-Raffstore-SW.LEVEL"));
-
-// schedule("30 0 * * *", function () {
-//     beregnen();
-// });
 

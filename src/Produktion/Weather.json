@@ -41,5 +41,5 @@ schedule("0 0 * * *", function () {
 });
 
 schedule("1 * * * *", findCurrentCondition);
-
-findForecast(WeatherApi.TOMORROW);
+SystemVariablen.MaxTemp.set(-20);
+findCurrentCondition();

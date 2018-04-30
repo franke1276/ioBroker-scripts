@@ -23,7 +23,7 @@ function beregnenAlle() {
 
 function beregnen(){
     let feuchtigkeit = SystemVariablen.BodenFeuchtigkeit.get();
-    log("Feuchtigkeit bei " + feuchtigkeit + ", beregnen!");
+    log("Feuchtigkeit bei " + feuchtigkeit);
     if (feuchtigkeit === 0) {
         log("beregnen!");
         beregnenAlle();
@@ -32,27 +32,27 @@ function beregnen(){
 }
  
 function decrementBodenFeuchtigkeit() {
-    const bodenFeuchtigkeit = SystemVariablen.BodenFeuchtigkeit.get();
+    let newBodenFeuchtigkeit = SystemVariablen.BodenFeuchtigkeit.get();
     const maxTemp = SystemVariablen.MaxTemp.get();
     const regenHeute = SystemVariablen.RegenHeute.get();
     
-    let newBodenFeuchtigkeit = bodenFeuchtigkeit;
     if (regenHeute >= 8) {
-        newBodenFeuchtigkeit = 4;
+        newBodenFeuchtigkeit += 4;
     } else if (regenHeute >= 5) {
-        newBodenFeuchtigkeit = 2;
+        newBodenFeuchtigkeit += 2;
     } else if (regenHeute < 5) {
-        if (maxTemp >= 28) {
-            newBodenFeuchtigkeit = 0;
+        if (maxTemp >= 26) {
+            newBodenFeuchtigkeit -= 4;
         } else if (maxTemp >= 20) {
-            newBodenFeuchtigkeit = bodenFeuchtigkeit - 2;
+            newBodenFeuchtigkeit -= 2;
         } else if (maxTemp >= 15) {
-            newBodenFeuchtigkeit = bodenFeuchtigkeit - 1;
+            newBodenFeuchtigkeit -= 1;
         }    
-    } 
+    }
     
     newBodenFeuchtigkeit = Math.max(0, newBodenFeuchtigkeit);
-    log("decrement feuchtigkeit, maxTemp  " + maxTemp + ", regenHeute: " + regenHeute + ", Alt: " + bodenFeuchtigkeit + ", Neu: " + newBodenFeuchtigkeit);
+    newBodenFeuchtigkeit = Math.min(6, newBodenFeuchtigkeit);
+    log("decrement feuchtigkeit, maxTemp  " + maxTemp + ", regenHeute: " + regenHeute +  ", Neu: " + newBodenFeuchtigkeit);
     SystemVariablen.BodenFeuchtigkeit.set(newBodenFeuchtigkeit);
 }
 

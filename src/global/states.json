@@ -68,6 +68,14 @@ var SystemVariablen = {
         get() {
             return States.getStateByName("RegenHeute");
         }
+    },
+    "ManuelleVerschattung": {
+        set(menge) {
+            States.setStateByName("ManuelleVerschattung", menge);    
+        },
+        get() {
+            return States.getStateByName("ManuelleVerschattung");
+        }
     }
 }
 
