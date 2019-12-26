@@ -88,7 +88,6 @@ function verschatte(name) {
     const verschattungsGrad = "verschattet";
     const currentValue = States.getStateByName(name);
     const manuelleVerschattung = SystemVariablen.ManuelleVerschattung.get();
-    log("Manuelle Verschattung: " + manuelleVerschattung);
     if (manuelleVerschattung === true) {
         log("Manuelle Verschattung aktiv, keine Änderung.")
         return;
@@ -156,9 +155,9 @@ function entferneVerschattungSW(){
 
 
 
-schedule("*/5 17-19 * * *", verschatteNW); 
-schedule("*/5 13-19 * * *", verschatteSW);
-schedule("*/5 8-15 * * *", verschatteSO);
+//schedule("*/5 17-18 * * *", verschatteNW); 
+//schedule("*/5 13-18 * * *", verschatteSW);
+//schedule("*/5 8-15 * * *", verschatteSO);
 
-schedule("0 16 * * *", entferneVerschattungSO);
-schedule("0 20 * * *", entferneVerschattungSW);
+//schedule("0 16 * * *", entferneVerschattungSO);
+//schedule("0 19 * * *", entferneVerschattungSW);

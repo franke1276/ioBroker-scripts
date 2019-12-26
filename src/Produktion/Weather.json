@@ -6,26 +6,34 @@
 -- do not edit previous lines - END --*/
 function findForecast(timePeriod) {
     log("findForecast for period " + timePeriod);
-    WeatherApi.findForecast(timePeriod, function (forecast) {
-        const temp = parseInt(forecast.high.celsius);
-        const regenForecast = parseInt(forecast.qpf_allday.mm);
-        log('forecast for ' + forecast.date.pretty + ': ' +  temp + " C" + " RegenForecast: " + regenForecast); 
-        SystemVariablen.ForecastTemp.set(temp);
-        SystemVariablen.RegenForecast.set(regenForecast);
-    });
+    SystemVariablen.ForecastTemp.set(30);
+    SystemVariablen.RegenForecast.set(0);
+        
+    // WeatherApi.findForecast(timePeriod, function (forecast) {
+    //     const temp = parseInt(forecast.high.celsius);
+    //     const regenForecast = parseInt(forecast.qpf_allday.mm);
+    //     log('forecast for ' + forecast.date.pretty + ': ' +  temp + " C" + " RegenForecast: " + regenForecast); 
+    //     SystemVariablen.ForecastTemp.set(temp);
+    //     SystemVariablen.RegenForecast.set(regenForecast);
+    // });
 }
 
 function findCurrentCondition () {
-  WeatherApi.findCurrentCondition(function (conditions) {
-      const temp = parseInt(conditions.current_observation.temp_c);
-      const regenHeuteInMM = parseInt(conditions.current_observation.precip_today_metric);
-      log("aktuelle Temp: " + temp + ", regenHeuteInMM: " + regenHeuteInMM);
-        if (temp > SystemVariablen.MaxTemp.get() ) {
-            SystemVariablen.MaxTemp.set(temp);
-        }
-        SystemVariablen.AussenTemp.set(temp);
-        SystemVariablen.RegenHeute.set(regenHeuteInMM);
-    });
+    SystemVariablen.RegenHeute.set(0);
+    SystemVariablen.AussenTemp.set(30);
+    
+  
+    // WeatherApi.findCurrentCondition(function (conditions) {
+    //   const temp = parseInt(conditions.current_observation.temp_c);
+    //   const regenHeuteInMM = parseInt(conditions.current_observation.precip_today_metric);
+    //   log("aktuelle Temp: " + temp + ", regenHeuteInMM: " + regenHeuteInMM);
+    //     if (temp > SystemVariablen.MaxTemp.get() ) {
+    //         SystemVariablen.MaxTemp.set(temp);
+    //     }
+    //     SystemVariablen.AussenTemp.set(temp);
+    //     SystemVariablen.RegenHeute.set(regenHeuteInMM);
+    // });
+    
 }
 
 schedule("0 22 * * *", function () {

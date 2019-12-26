@@ -7,18 +7,19 @@
 
 
 function beregnenByName(name, delayInSec, durationInSec) {
-    log("starte Beregnung " + name + " delayInSec: " + delayInSec + " durationInSec: " + durationInSec);
+    log("starte Beregnung '" + name + "' delayInSec: " + delayInSec + " durationInSec: " + durationInSec);
     States.setStateDelayedByName(name + ".STATE", true, delayInSec, false);
     States.setStateDelayedByName(name + ".STATE", false, delayInSec + durationInSec, false);
     return delayInSec + durationInSec;
 }
 
 function beregnenAlle() {
-    let delay = 0;
-    delay = beregnenByName("Beregung-Hinten", delay, 45 * 60);
-    delay = beregnenByName("Beregnung Vorne", delay, 45 * 60);
-    delay = beregnenByName("Beregnung Einfahrt", delay, 30 * 60);
-    delay = beregnenByName("Tropfberegung", delay, 60 * 60);
+    run([
+        ["Beregnung Einfahrt", 15],
+        ["Beregnung Vorne", 30],
+        ["Beregung-Hinten", 30],
+        ["Tropfberegung", 30],
+    ]);
 }
 
 function beregnen(){
@@ -27,7 +28,7 @@ function beregnen(){
     if (feuchtigkeit === 0) {
         log("beregnen!");
         beregnenAlle();
-        SystemVariablen.BodenFeuchtigkeit.set(4);
+        SystemVariablen.BodenFeuchtigkeit.set(2);
     }
 }
  
@@ -36,20 +37,20 @@ function decrementBodenFeuchtigkeit() {
     const maxTemp = SystemVariablen.MaxTemp.get();
     const regenHeute = SystemVariablen.RegenHeute.get();
     
-    if (regenHeute >= 8) {
-        newBodenFeuchtigkeit += 4;
-    } else if (regenHeute >= 5) {
-        newBodenFeuchtigkeit += 2;
-    } else if (regenHeute < 5) {
-        if (maxTemp >= 26) {
-            newBodenFeuchtigkeit -= 4;
-        } else if (maxTemp >= 20) {
-            newBodenFeuchtigkeit -= 2;
-        } else if (maxTemp >= 15) {
-            newBodenFeuchtigkeit -= 1;
-        }    
-    }
-    
+    // if (regenHeute >= 8) {
+    //     newBodenFeuchtigkeit += 4;
+    // } else if (regenHeute >= 5) {
+    //     newBodenFeuchtigkeit += 2;
+    // } else if (regenHeute < 5) {
+    //     if (maxTemp >= 26) {
+    //         newBodenFeuchtigkeit -= 4;
+    //     } else if (maxTemp >= 20) {
+    //         newBodenFeuchtigkeit -= 2;
+    //     } else if (maxTemp >= 15) {
+    //         newBodenFeuchtigkeit -= 1;
+    //     }    
+    // }
+    newBodenFeuchtigkeit -= 1;
     newBodenFeuchtigkeit = Math.max(0, newBodenFeuchtigkeit);
     newBodenFeuchtigkeit = Math.min(6, newBodenFeuchtigkeit);
     log("decrement feuchtigkeit, maxTemp  " + maxTemp + ", regenHeute: " + regenHeute +  ", Neu: " + newBodenFeuchtigkeit);
@@ -57,5 +58,18 @@ function decrementBodenFeuchtigkeit() {
 }
 
 
+function run(config) {
+    let delay = 0;
+    for (i=0; i < config.length; i++) {
+        delay = beregnenByName(config[i][0], delay, config[i][1] * 60);
+    }
+}
+
 schedule("0 23 * * *", decrementBodenFeuchtigkeit);
-schedule("0 1 * * *", beregnen);
+schedule("0 5 * * *", beregnen);
+
+
+// run([
+//     ["Beregnung Vorne", 30],
+//     ["Tropfberegung", 60]
+// ]);
